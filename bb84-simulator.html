@@ -1,0 +1,2624 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BB84 Banking Security Simulator - AQVH 2025</title>
+    <style>
+        :root {
+            /* Primitive Color Tokens */
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-teal-800: rgba(41, 150, 161, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-red-500: rgba(192, 21, 47, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-orange-500: rgba(168, 75, 47, 1);
+
+            /* RGB versions for opacity control */
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+            --color-slate-500-rgb: 98, 108, 113;
+            --color-red-500-rgb: 192, 21, 47;
+            --color-red-400-rgb: 255, 84, 89;
+            --color-orange-500-rgb: 168, 75, 47;
+            --color-orange-400-rgb: 230, 129, 97;
+
+            /* Background color tokens (Light Mode) */
+            --color-bg-1: rgba(59, 130, 246, 0.08);
+            --color-bg-2: rgba(245, 158, 11, 0.08);
+            --color-bg-3: rgba(34, 197, 94, 0.08);
+            --color-bg-4: rgba(239, 68, 68, 0.08);
+            --color-bg-5: rgba(147, 51, 234, 0.08);
+            --color-bg-6: rgba(249, 115, 22, 0.08);
+            --color-bg-7: rgba(236, 72, 153, 0.08);
+            --color-bg-8: rgba(6, 182, 212, 0.08);
+
+            /* Semantic Color Tokens (Light Mode) */
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-primary-active: var(--color-teal-700);
+            --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-btn-primary-text: var(--color-cream-50);
+            --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-error: var(--color-red-500);
+            --color-success: var(--color-teal-500);
+            --color-warning: var(--color-orange-500);
+            --color-info: var(--color-slate-500);
+            --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+            --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+
+            /* Common style patterns */
+            --focus-ring: 0 0 0 3px var(--color-focus-ring);
+            --focus-outline: 2px solid var(--color-primary);
+            --status-bg-opacity: 0.15;
+            --status-border-opacity: 0.25;
+            --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+            /* RGB versions for opacity control */
+            --color-success-rgb: 33, 128, 141;
+            --color-error-rgb: 192, 21, 47;
+            --color-warning-rgb: 168, 75, 47;
+            --color-info-rgb: 98, 108, 113;
+
+            /* Typography */
+            --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system,
+                BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo,
+                Monaco, Consolas, monospace;
+            --font-size-xs: 11px;
+            --font-size-sm: 12px;
+            --font-size-base: 14px;
+            --font-size-md: 14px;
+            --font-size-lg: 16px;
+            --font-size-xl: 18px;
+            --font-size-2xl: 20px;
+            --font-size-3xl: 24px;
+            --font-size-4xl: 30px;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 550;
+            --font-weight-bold: 600;
+            --line-height-tight: 1.2;
+            --line-height-normal: 1.5;
+            --letter-spacing-tight: -0.01em;
+
+            /* Spacing */
+            --space-0: 0;
+            --space-1: 1px;
+            --space-2: 2px;
+            --space-4: 4px;
+            --space-6: 6px;
+            --space-8: 8px;
+            --space-10: 10px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+
+            /* Border Radius */
+            --radius-sm: 6px;
+            --radius-base: 8px;
+            --radius-md: 10px;
+            --radius-lg: 12px;
+            --radius-full: 9999px;
+
+            /* Shadows */
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04),
+                0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04),
+                0 4px 6px -2px rgba(0, 0, 0, 0.02);
+            --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+
+            /* Animation */
+            --duration-fast: 150ms;
+            --duration-normal: 250ms;
+            --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+            /* Layout */
+            --container-sm: 640px;
+            --container-md: 768px;
+            --container-lg: 1024px;
+            --container-xl: 1280px;
+        }
+
+        /* Dark mode colors */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* RGB versions for opacity control (Dark Mode) */
+                --color-gray-400-rgb: 119, 124, 124;
+                --color-teal-300-rgb: 50, 184, 198;
+                --color-gray-300-rgb: 167, 169, 169;
+                --color-gray-200-rgb: 245, 245, 245;
+
+                /* Colorful background palette - Dark Mode */
+                --color-bg-1: rgba(29, 78, 216, 0.15);
+                --color-bg-2: rgba(180, 83, 9, 0.15);
+                --color-bg-3: rgba(21, 128, 61, 0.15);
+                --color-bg-4: rgba(185, 28, 28, 0.15);
+                --color-bg-5: rgba(107, 33, 168, 0.15);
+                --color-bg-6: rgba(194, 65, 12, 0.15);
+                --color-bg-7: rgba(190, 24, 93, 0.15);
+                --color-bg-8: rgba(8, 145, 178, 0.15);
+
+                /* Semantic Color Tokens (Dark Mode) */
+                --color-background: var(--color-charcoal-700);
+                --color-surface: var(--color-charcoal-800);
+                --color-text: var(--color-gray-200);
+                --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+                --color-primary: var(--color-teal-300);
+                --color-primary-hover: var(--color-teal-400);
+                --color-primary-active: var(--color-teal-800);
+                --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+                --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+                --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+                --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+                --color-error: var(--color-red-400);
+                --color-success: var(--color-teal-300);
+                --color-warning: var(--color-orange-400);
+                --color-info: var(--color-gray-300);
+                --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+                --color-btn-primary-text: var(--color-slate-900);
+                --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+                --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+                --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+                --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+                --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+                /* Common style patterns - updated for dark mode */
+                --focus-ring: 0 0 0 3px var(--color-focus-ring);
+                --focus-outline: 2px solid var(--color-primary);
+                --status-bg-opacity: 0.15;
+                --status-border-opacity: 0.25;
+                --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+                --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+                /* RGB versions for dark mode */
+                --color-success-rgb: var(--color-teal-300-rgb);
+                --color-error-rgb: var(--color-red-400-rgb);
+                --color-warning-rgb: var(--color-orange-400-rgb);
+                --color-info-rgb: var(--color-gray-300-rgb);
+            }
+        }
+
+
+
+        /* Data attribute for manual theme switching */
+        [data-color-scheme="dark"] {
+            /* RGB versions for opacity control (dark mode) */
+            --color-gray-400-rgb: 119, 124, 124;
+            --color-teal-300-rgb: 50, 184, 198;
+            --color-gray-300-rgb: 167, 169, 169;
+            --color-gray-200-rgb: 245, 245, 245;
+
+            /* Colorful background palette - Dark Mode */
+            --color-bg-1: rgba(29, 78, 216, 0.15);
+            --color-bg-2: rgba(180, 83, 9, 0.15);
+            --color-bg-3: rgba(21, 128, 61, 0.15);
+            --color-bg-4: rgba(185, 28, 28, 0.15);
+            --color-bg-5: rgba(107, 33, 168, 0.15);
+            --color-bg-6: rgba(194, 65, 12, 0.15);
+            --color-bg-7: rgba(190, 24, 93, 0.15);
+            --color-bg-8: rgba(8, 145, 178, 0.15);
+
+            /* Semantic Color Tokens (Dark Mode) */
+            --color-background: var(--color-charcoal-700);
+            --color-surface: var(--color-charcoal-800);
+            --color-text: var(--color-gray-200);
+            --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+            --color-primary: var(--color-teal-300);
+            --color-primary-hover: var(--color-teal-400);
+            --color-primary-active: var(--color-teal-800);
+            --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+            --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+            --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+            --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+            --color-error: var(--color-red-400);
+            --color-success: var(--color-teal-300);
+            --color-warning: var(--color-orange-400);
+            --color-info: var(--color-gray-300);
+            --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+            --color-btn-primary-text: var(--color-slate-900);
+            --color-card-border: rgba(var(--color-gray-400-rgb), 0.15);
+            --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+            --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+            --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+            --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+            /* Common style patterns - updated for dark mode */
+            --focus-ring: 0 0 0 3px var(--color-focus-ring);
+            --focus-outline: 2px solid var(--color-primary);
+            --status-bg-opacity: 0.15;
+            --status-border-opacity: 0.25;
+            --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+            /* RGB versions for dark mode */
+            --color-success-rgb: var(--color-teal-300-rgb);
+            --color-error-rgb: var(--color-red-400-rgb);
+            --color-warning-rgb: var(--color-orange-400-rgb);
+            --color-info-rgb: var(--color-gray-300-rgb);
+        }
+
+
+
+        /* Base styles */
+        html {
+            font-size: var(--font-size-base);
+            font-family: var(--font-family-base);
+            line-height: var(--line-height-normal);
+            color: var(--color-text);
+            background-color: var(--color-background);
+            -webkit-font-smoothing: antialiased;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: inherit;
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            margin: 0;
+            font-weight: var(--font-weight-semibold);
+            line-height: var(--line-height-tight);
+            color: var(--color-text);
+            letter-spacing: var(--letter-spacing-tight);
+        }
+
+        h1 {
+            font-size: var(--font-size-4xl);
+        }
+
+        h2 {
+            font-size: var(--font-size-3xl);
+        }
+
+        h3 {
+            font-size: var(--font-size-2xl);
+        }
+
+        h4 {
+            font-size: var(--font-size-xl);
+        }
+
+        h5 {
+            font-size: var(--font-size-lg);
+        }
+
+        h6 {
+            font-size: var(--font-size-md);
+        }
+
+        p {
+            margin: 0 0 var(--space-16) 0;
+        }
+
+        a {
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: color var(--duration-fast) var(--ease-standard);
+        }
+
+        a:hover {
+            color: var(--color-primary-hover);
+        }
+
+        code,
+        pre {
+            font-family: var(--font-family-mono);
+            font-size: calc(var(--font-size-base) * 0.95);
+            background-color: var(--color-secondary);
+            border-radius: var(--radius-sm);
+        }
+
+        code {
+            padding: var(--space-1) var(--space-4);
+        }
+
+        pre {
+            padding: var(--space-16);
+            margin: var(--space-16) 0;
+            overflow: auto;
+            border: 1px solid var(--color-border);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-8) var(--space-16);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: all var(--duration-normal) var(--ease-standard);
+            border: none;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .btn:focus-visible {
+            outline: none;
+            box-shadow: var(--focus-ring);
+        }
+
+        .btn--primary {
+            background: var(--color-primary);
+            color: var(--color-btn-primary-text);
+        }
+
+        .btn--primary:hover {
+            background: var(--color-primary-hover);
+        }
+
+        .btn--primary:active {
+            background: var(--color-primary-active);
+        }
+
+        .btn--secondary {
+            background: var(--color-secondary);
+            color: var(--color-text);
+        }
+
+        .btn--secondary:hover {
+            background: var(--color-secondary-hover);
+        }
+
+        .btn--secondary:active {
+            background: var(--color-secondary-active);
+        }
+
+        .btn--outline {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+        }
+
+        .btn--outline:hover {
+            background: var(--color-secondary);
+        }
+
+        .btn--sm {
+            padding: var(--space-4) var(--space-12);
+            font-size: var(--font-size-sm);
+            border-radius: var(--radius-sm);
+        }
+
+        .btn--lg {
+            padding: var(--space-10) var(--space-20);
+            font-size: var(--font-size-lg);
+            border-radius: var(--radius-md);
+        }
+
+        .btn--full-width {
+            width: 100%;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Form elements */
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: var(--space-8) var(--space-12);
+            font-size: var(--font-size-md);
+            line-height: 1.5;
+            color: var(--color-text);
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            transition: border-color var(--duration-fast) var(--ease-standard),
+                box-shadow var(--duration-fast) var(--ease-standard);
+        }
+
+        textarea.form-control {
+            font-family: var(--font-family-base);
+            font-size: var(--font-size-base);
+        }
+
+        select.form-control {
+            padding: var(--space-8) var(--space-12);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: var(--select-caret-light);
+            background-repeat: no-repeat;
+            background-position: right var(--space-12) center;
+            background-size: 16px;
+            padding-right: var(--space-32);
+        }
+
+        /* Add a dark mode specific caret */
+        @media (prefers-color-scheme: dark) {
+            select.form-control {
+                background-image: var(--select-caret-dark);
+            }
+        }
+
+        /* Also handle data-color-scheme */
+        [data-color-scheme="dark"] select.form-control {
+            background-image: var(--select-caret-dark);
+        }
+
+        [data-color-scheme="light"] select.form-control {
+            background-image: var(--select-caret-light);
+        }
+
+        .form-control:focus {
+            border-color: var(--color-primary);
+            outline: var(--focus-outline);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-8);
+            font-weight: var(--font-weight-medium);
+            font-size: var(--font-size-sm);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-16);
+        }
+
+        /* Card component */
+        .card {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-card-border);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: box-shadow var(--duration-normal) var(--ease-standard);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card__body {
+            padding: var(--space-16);
+        }
+
+        .card__header,
+        .card__footer {
+            padding: var(--space-16);
+            border-bottom: 1px solid var(--color-card-border-inner);
+        }
+
+        /* Status indicators - simplified with CSS variables */
+        .status {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--space-6) var(--space-12);
+            border-radius: var(--radius-full);
+            font-weight: var(--font-weight-medium);
+            font-size: var(--font-size-sm);
+        }
+
+        .status--success {
+            background-color: rgba(var(--color-success-rgb, 33, 128, 141),
+                    var(--status-bg-opacity));
+            color: var(--color-success);
+            border: 1px solid rgba(var(--color-success-rgb, 33, 128, 141), var(--status-border-opacity));
+        }
+
+        .status--error {
+            background-color: rgba(var(--color-error-rgb, 192, 21, 47),
+                    var(--status-bg-opacity));
+            color: var(--color-error);
+            border: 1px solid rgba(var(--color-error-rgb, 192, 21, 47), var(--status-border-opacity));
+        }
+
+        .status--warning {
+            background-color: rgba(var(--color-warning-rgb, 168, 75, 47),
+                    var(--status-bg-opacity));
+            color: var(--color-warning);
+            border: 1px solid rgba(var(--color-warning-rgb, 168, 75, 47), var(--status-border-opacity));
+        }
+
+        .status--info {
+            background-color: rgba(var(--color-info-rgb, 98, 108, 113),
+                    var(--status-bg-opacity));
+            color: var(--color-info);
+            border: 1px solid rgba(var(--color-info-rgb, 98, 108, 113), var(--status-border-opacity));
+        }
+
+        /* Container layout */
+        .container {
+            width: 100%;
+            margin-right: auto;
+            margin-left: auto;
+            padding-right: var(--space-16);
+            padding-left: var(--space-16);
+        }
+
+        @media (min-width: 640px) {
+            .container {
+                max-width: var(--container-sm);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: var(--container-md);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: var(--container-lg);
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .container {
+                max-width: var(--container-xl);
+            }
+        }
+
+        /* Utility classes */
+        .flex {
+            display: flex;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .gap-4 {
+            gap: var(--space-4);
+        }
+
+        .gap-8 {
+            gap: var(--space-8);
+        }
+
+        .gap-16 {
+            gap: var(--space-16);
+        }
+
+        .m-0 {
+            margin: 0;
+        }
+
+        .mt-8 {
+            margin-top: var(--space-8);
+        }
+
+        .mb-8 {
+            margin-bottom: var(--space-8);
+        }
+
+        .mx-8 {
+            margin-left: var(--space-8);
+            margin-right: var(--space-8);
+        }
+
+        .my-8 {
+            margin-top: var(--space-8);
+            margin-bottom: var(--space-8);
+        }
+
+        .p-0 {
+            padding: 0;
+        }
+
+        .py-8 {
+            padding-top: var(--space-8);
+            padding-bottom: var(--space-8);
+        }
+
+        .px-8 {
+            padding-left: var(--space-8);
+            padding-right: var(--space-8);
+        }
+
+        .py-16 {
+            padding-top: var(--space-16);
+            padding-bottom: var(--space-16);
+        }
+
+        .px-16 {
+            padding-left: var(--space-16);
+            padding-right: var(--space-16);
+        }
+
+        .block {
+            display: block;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        :focus-visible {
+            outline: var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        /* Dark mode specifics */
+        [data-color-scheme="dark"] .btn--outline {
+            border: 1px solid var(--color-border-secondary);
+        }
+
+        @font-face {
+            font-family: 'FKGroteskNeue';
+            src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2') format('woff2');
+        }
+
+        /* END PERPLEXITY DESIGN SYSTEM */
+        /* App-specific styles for BB84 Banking Security Simulator */
+
+        .app {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--color-bg-1), var(--color-bg-3));
+        }
+
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: var(--space-24);
+        }
+        
+        /* Language Toggle Styles */
+        .language-toggle {
+            position: absolute;
+            top: var(--space-16);
+            right: var(--space-16);
+            z-index: 100;
+        }
+
+        .language-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-6);
+            padding: var(--space-8) var(--space-16);
+            background: var(--color-surface);
+            border: 2px solid var(--color-primary);
+            border-radius: var(--radius-full);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-text);
+            cursor: pointer;
+            transition: all var(--duration-normal) var(--ease-standard);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .language-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            background: var(--color-primary);
+            color: var(--color-btn-primary-text);
+        }
+
+        .language-btn .flag {
+            font-size: var(--font-size-lg);
+        }
+
+        .language-btn .toggle-arrow {
+            color: var(--color-primary);
+            font-weight: var(--font-weight-bold);
+            transition: color var(--duration-normal);
+        }
+
+        .language-btn:hover .toggle-arrow {
+            color: var(--color-btn-primary-text);
+        }
+
+        .language-btn .lang-text-alt {
+            font-size: var(--font-size-sm);
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--color-surface);
+            border-bottom: 2px solid var(--color-primary);
+            padding: var(--space-32) 0 var(--space-24) 0;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+        }
+
+        .header__title {
+            font-size: var(--font-size-4xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+            text-align: center;
+            margin-bottom: var(--space-8);
+            margin-top: var(--space-20);
+        }
+
+        .header__subtitle {
+            text-align: center;
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--space-24);
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-32);
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat__value {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+            display: block;
+        }
+
+        .stat__label {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: var(--space-4);
+        }
+
+        /* Character Cards */
+        .characters {
+            padding: var(--space-32) 0;
+        }
+
+        .characters h2 {
+            text-align: center;
+            margin-bottom: var(--space-24);
+            font-size: var(--font-size-3xl);
+        }
+
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-20);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .character-card {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-24);
+            text-align: center;
+            border: 2px solid var(--color-card-border);
+            transition: all var(--duration-normal) var(--ease-standard);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .character-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .character-card[data-character="alice"] {
+            border-color: var(--color-teal-500);
+        }
+
+        .character-card[data-character="bob"] {
+            border-color: #059669;
+        }
+
+        .character-card[data-character="eve"] {
+            border-color: var(--color-error);
+        }
+
+        .character-card__icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-16);
+        }
+
+        .character-card h3 {
+            margin-bottom: var(--space-12);
+            font-size: var(--font-size-xl);
+        }
+
+        .character-card p {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-16);
+            line-height: 1.6;
+        }
+
+        .character-card__status {
+            display: inline-block;
+            padding: var(--space-6) var(--space-12);
+            border-radius: var(--radius-full);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            background: var(--color-bg-3);
+            color: var(--color-success);
+            border: 1px solid rgba(var(--color-success-rgb), 0.3);
+        }
+
+        /* Demo Control Panel */
+        .demo-control {
+            padding: var(--space-24) 0;
+        }
+
+        .control-panel {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--space-32);
+        }
+
+        .control-panel h2 {
+            text-align: center;
+            margin-bottom: var(--space-24);
+            font-size: var(--font-size-2xl);
+        }
+
+        .control-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-32);
+            margin-bottom: var(--space-24);
+        }
+
+        .control-row:last-child {
+            margin-bottom: var(--space-24);
+        }
+
+        @media (min-width: 768px) {
+            .control-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .control-row:last-child {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .control-row {
+                grid-template-columns: 1fr;
+                gap: var(--space-20);
+            }
+
+            .language-toggle {
+                position: relative;
+                top: auto;
+                right: auto;
+                text-align: center;
+                margin-bottom: var(--space-16);
+            }
+
+            .header__title {
+                margin-top: var(--space-8);
+            }
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .amount-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: var(--radius-full);
+            background: var(--color-secondary);
+            outline: none;
+            margin: var(--space-12) 0;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .amount-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            cursor: pointer;
+            border: 2px solid var(--color-surface);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .amount-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            cursor: pointer;
+            border: 2px solid var(--color-surface);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .amount-range {
+            text-align: center;
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+        }
+
+        #amountDisplay {
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+            font-size: var(--font-size-lg);
+        }
+
+        .toggle-container {
+            margin-top: var(--space-12);
+        }
+
+        .toggle-input {
+            display: none;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            padding-left: 60px;
+        }
+
+        .toggle-label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 26px;
+            background: var(--color-secondary);
+            border-radius: var(--radius-full);
+            border: 2px solid var(--color-border);
+            transition: all var(--duration-normal) var(--ease-standard);
+        }
+
+        .toggle-label::after {
+            content: '';
+            position: absolute;
+            left: 2px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 22px;
+            height: 22px;
+            background: var(--color-surface);
+            border-radius: 50%;
+            transition: all var(--duration-normal) var(--ease-standard);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toggle-input:checked+.toggle-label::before {
+            background: var(--color-error);
+            border-color: var(--color-error);
+        }
+
+        .toggle-input:checked+.toggle-label::after {
+            left: 26px;
+        }
+
+        .toggle-text {
+            font-weight: var(--font-weight-medium);
+        }
+
+        .message-input {
+            margin-top: 12px;
+        }
+
+        /* Security Comparison */
+        .security-comparison {
+            padding: var(--space-32) 0;
+            background: var(--color-bg-2);
+        }
+
+        .security-comparison h2 {
+            text-align: center;
+            margin-bottom: var(--space-32);
+            font-size: var(--font-size-3xl);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-24);
+            margin-bottom: var(--space-32);
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .security-column {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-24);
+            border: 2px solid var(--color-card-border);
+            transition: all var(--duration-normal) var(--ease-standard);
+        }
+
+        .security-column.traditional {
+            border-color: var(--color-error);
+        }
+
+        .security-column.qkd {
+            border-color: var(--color-primary);
+        }
+
+        .security-header h3 {
+            margin-bottom: var(--space-8);
+            font-size: var(--font-size-xl);
+        }
+
+        .security-features ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 var(--space-20) 0;
+        }
+
+        .security-features li {
+            padding: var(--space-6) 0;
+            border-bottom: 1px solid var(--color-card-border-inner);
+        }
+
+        .security-features li:last-child {
+            border-bottom: none;
+        }
+
+        .security-status {
+            display: flex;
+            align-items: center;
+            gap: var(--space-8);
+            padding: var(--space-12);
+            border-radius: var(--radius-base);
+            font-weight: var(--font-weight-medium);
+            background: var(--color-secondary);
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--color-text-secondary);
+            animation: pulse 2s infinite;
+        }
+
+        .security-status.secure .status-indicator {
+            background: var(--color-success);
+        }
+
+        .security-status.compromised .status-indicator {
+            background: var(--color-error);
+        }
+
+        .security-status.detected .status-indicator {
+            background: var(--color-warning);
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Error Rate Meter */
+        .error-meter {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-20);
+            border: 2px solid var(--color-card-border);
+        }
+
+        .error-meter h4 {
+            text-align: center;
+            margin-bottom: var(--space-16);
+        }
+
+        .meter {
+            width: 100%;
+            height: 20px;
+            background: var(--color-secondary);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-success), var(--color-warning), var(--color-error));
+            border-radius: var(--radius-full);
+            width: 0%;
+            transition: width var(--duration-normal) var(--ease-standard);
+        }
+
+        .meter-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: var(--space-8);
+            font-size: var(--font-size-sm);
+        }
+
+        #errorPercent {
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+            font-size: var(--font-size-lg);
+        }
+
+        #errorStatus {
+            color: var(--color-success);
+            font-weight: var(--font-weight-medium);
+        }
+
+        #errorStatus.warning {
+            color: var(--color-warning);
+        }
+
+        #errorStatus.danger {
+            color: var(--color-error);
+        }
+
+        /* Results Section */
+        .results {
+            padding: var(--space-32) 0;
+            background: var(--color-bg-4);
+        }
+
+        .results-card {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--space-32);
+            text-align: center;
+        }
+
+        .results-card h2 {
+            margin-bottom: var(--space-24);
+            font-size: var(--font-size-3xl);
+        }
+
+        .result-content {
+            margin-bottom: var(--space-32);
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-16);
+            display: block;
+        }
+
+        .result-message {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-medium);
+            margin-bottom: var(--space-16);
+        }
+
+        .result-details {
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        .key-message {
+            background: var(--color-bg-3);
+            padding: var(--space-24);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-24);
+            border: 2px dashed rgba(var(--color-success-rgb), 0.3);
+        }
+
+        .key-message h3 {
+            margin-bottom: var(--space-12);
+            color: var(--color-success);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: var(--space-16);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-20);
+        }
+
+        .modal.hidden {
+            display: none;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--color-card-border);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-20) var(--space-24);
+            border-bottom: 1px solid var(--color-card-border-inner);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: var(--font-size-xl);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: var(--font-size-3xl);
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-base);
+            transition: background-color var(--duration-fast) var(--ease-standard);
+        }
+
+        .modal-close:hover {
+            background: var(--color-secondary);
+        }
+
+        .modal-body {
+            padding: var(--space-24);
+        }
+
+        .modal-body h4 {
+            margin: var(--space-20) 0 var(--space-12) 0;
+            color: var(--color-primary);
+        }
+
+        .modal-body ol,
+        .modal-body ul {
+            margin: var(--space-12) 0;
+            padding-left: var(--space-20);
+        }
+
+        .modal-body li {
+            margin-bottom: var(--space-8);
+            line-height: 1.6;
+        }
+
+        .bb84-details {
+            padding: var(--space-32) 0;
+            background-color: var(--color-background);
+        }
+
+        .bb84-details .container {
+            max-width: 800px;
+        }
+
+        .bb84-details h2 {
+            text-align: center;
+            margin-bottom: var(--space-24);
+        }
+
+        .bb84-details h3 {
+            margin-top: var(--space-24);
+            margin-bottom: var(--space-16);
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: var(--space-8);
+        }
+
+        .bb84-details p {
+            margin-bottom: var(--space-16);
+        }
+
+        .bb84-details table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: var(--space-24);
+            font-size: var(--font-size-sm);
+        }
+
+        .bb84-details th,
+        .bb84-details td {
+            border: 1px solid var(--color-card-border);
+            padding: var(--space-12);
+            text-align: left;
+        }
+
+        .bb84-details th {
+            background-color: var(--color-secondary);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .bb84-details strong {
+            color: var(--color-primary);
+        }
+
+        .code-block {
+            font-family: var(--font-family-mono);
+            background-color: var(--color-secondary);
+            padding: 12px;
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-top: 12px;
+            font-size: var(--font-size-base);
+            line-height: 1.6;
+        }
+
+        .sifted-keys-line {
+            font-family: var(--font-family-mono);
+            font-size: var(--font-size-lg);
+            color: var(--color-success);
+            font-weight: var(--font-weight-bold);
+            background-color: rgba(var(--color-success-rgb), 0.1);
+            padding: 12px;
+            border-radius: var(--radius-md);
+            border: 2px dashed var(--color-success);
+            margin-top: 12px;
+            word-break: break-all;
+        }
+
+        .sifted-key-container {
+            margin-top: 24px;
+            padding: 16px;
+            background-color: rgba(var(--color-success-rgb), 0.1);
+            border-radius: var(--radius-md);
+            border: 2px dashed var(--color-success);
+            text-align: center;
+        }
+
+        .sifted-key-container h4 {
+            color: var(--color-success);
+        }
+
+        .final-key-value {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-teal-500);
+            letter-spacing: 2px;
+            word-break: break-all;
+        }
+
+        @keyframes pulse-green {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Animations */
+        .animate-in {
+            animation: slideIn 0.5s var(--ease-standard);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .processing {
+            animation: processing 1.5s ease-in-out infinite;
+        }
+
+        @keyframes processing {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Language transition effect */
+        .language-transition {
+            transition: opacity var(--duration-fast) var(--ease-standard);
+        }
+
+        .language-transition.fade-out {
+            opacity: 0.3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header__title {
+                font-size: var(--font-size-2xl);
+            }
+
+            .stats-bar {
+                gap: var(--space-16);
+            }
+
+            .stat {
+                min-width: 100px;
+            }
+
+            .stat__value {
+                font-size: var(--font-size-lg);
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                margin: var(--space-16);
+                max-height: calc(100vh - 32px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <!-- Main App container -->
+        <div id="mainApp" class="hidden">
+            <header class="header">
+                <div class="container">
+                    <div class="language-toggle">
+                        <button id="languageToggle" class="btn language-btn">
+                            <span class="flag">🇬🇧</span>
+                            <span class="lang-text">English</span>
+                            <span class="toggle-arrow">⇄</span>
+                            <span class="flag">🇮🇳</span>
+                            <span class="lang-text-alt">हिं</span>
+                        </button>
+                    </div>
+
+                    <h1 class="header__title" data-translate="title">🔒 BB84 Banking Security Simulator</h1>
+                    <div class="header__subtitle" data-translate="subtitle">Indian Banking Edition - AQVH 2025 Hackathon
+                    </div>
+                    <div class="stats-bar">
+                        <div class="stat">
+                            <span class="stat__value" id="totalSims">12,470</span>
+                            <span class="stat__label">Simulations</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat__value" id="threatsBlocked">8,920</span>
+                            <span class="stat__label">Threats Blocked</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat__value" id="fraudSaved">₹147 Cr</span>
+                            <span class="stat__label">Fraud Prevented</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat__value" id="successRate">98.5%</span>
+                            <span class="stat__label">Success Rate</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="characters">
+                <div class="container">
+                    <h2 data-translate="characters_heading">Security Participants</h2>
+                    <div class="character-grid">
+                        <div class="character-card" data-character="alice">
+                            <div class="character-card__icon">🏦</div>
+                            <h3 id="recipientBankName">Bank Server</h3>
+                            <p>Transaction to: <strong id="selectedRecipientName"></strong></p>
+                            <p id="alice_desc">Generates quantum keys and encrypts transaction data using BB84
+                                protocol</p>
+                            <div class="form-group" style="margin-top: 1rem;">
+                                <label class="form-label" for="recipientSelect">Send money to:</label>
+                                <select id="recipientSelect" class="form-control"></select>
+                            </div>
+                            <div class="character-card__status" id="aliceStatus">Ready</div>
+                        </div>
+                        <div class="character-card" data-character="bob">
+                            <div class="character-card__icon">👤</div>
+                            <h3 data-translate="bob_name" id="bobName">Bob - Customer</h3>
+                            <p data-translate="bob_desc">Receives quantum keys and securely decrypts banking transactions
+                            </p>
+                            <div class="character-card__status" id="bobStatus">Ready</div>
+                        </div>
+                        <div class="character-card" data-character="eve">
+                            <div class="character-card__icon">🕵️</div>
+                            <h3 data-translate="eve_name">Eve - Hacker</h3>
+                            <p data-translate="eve_desc">Attempts to intercept data but gets detected by quantum mechanics
+                            </p>
+                            <div class="character-card__status" id="eveStatus">Inactive</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="demo-control">
+                <div class="container">
+                    <div class="control-panel card">
+                        <h2 data-translate="demo_heading">🚀 Interactive Banking Security Demo</h2>
+                        <div class="control-row">
+                            <div class="control-group">
+                                <label class="form-label" for="transactionAmount">
+                                    <span data-translate="amount_label">Transaction Amount</span>: ₹<span
+                                        id="amountDisplay">50,000</span>
+                                </label>
+                                <input type="range" id="transactionAmount" class="amount-slider" min="10000"
+                                    max="10000000" value="50000" step="10000">
+                                <div class="amount-range">₹10,000 → ₹1,00,00,000 (1 Crore)</div>
+                            </div>
+                            <div class="control-group">
+                                <label class="form-label" data-translate="scenario_label">Banking Scenario</label>
+                                <select id="bankingScenario" class="form-control">
+                                    <option value="rtgs">RTGS Transfer - ₹5,00,000</option>
+                                    <option value="neft">NEFT Payment - ₹2,00,000</option>
+                                    <option value="property">Property Purchase - ₹50,00,000</option>
+                                    <option value="remittance">International Remittance - ₹10,00,000</option>
+                                    <option value="business">Business Payment - ₹2,50,000</option>
+                                    <option value="upi">Digital UPI - ₹25,000</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-row">
+                            <div class="control-group">
+                                <div class="toggle-container">
+                                    <input type="checkbox" id="eveAttack" class="toggle-input">
+                                    <label for="eveAttack" class="toggle-label">
+                                        <span class="toggle-text" data-translate="eve_toggle_label">Enable Eve Attack
+                                            (Hacker Simulation)</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="startTransaction" class="btn btn--primary btn--lg btn--full-width">
+                            <span data-translate="start_button">Start Secure Transaction</span> 🔐
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="security-comparison hidden" id="comparisonSection">
+                <div class="container">
+                    <h2>🛡️ Security Comparison: Traditional vs Quantum</h2>
+                    <div class="comparison-grid">
+                        <div class="security-column traditional">
+                            <div class="security-header">
+                                <h3 data-translate="traditional_heading">🔓 Traditional Encryption (RSA-2048)</h3>
+                            </div>
+                            <div class="security-features">
+                                <ul>
+                                    <li>Mathematical complexity based</li>
+                                    <li>❌ Vulnerable to quantum computers</li>
+                                    <li>❌ Cannot detect eavesdropping</li>
+                                    <li>❌ Harvest now, decrypt later risk</li>
+                                </ul>
+                            </div>
+                            <div class="security-status" id="traditionalStatus">
+                                <span class="status-indicator"></span>
+                                <span class="status-text" data-translate="processing_text">Processing...</span>
+                            </div>
+                        </div>
+
+                        <div class="security-column qkd">
+                            <div class="security-header">
+                                <h3 data-translate="qkd_heading">🔐 BB84 Quantum Key Distribution</h3>
+                            </div>
+                            <div class="security-features">
+                                <ul>
+                                    <li>Information-theoretic security</li>
+                                    <li>✅ Quantum-safe encryption</li>
+                                    <li>✅ Immediate eavesdropping detection</li>
+                                    <li>✅ Future-proof protection</li>
+                                </ul>
+                            </div>
+                            <div class="security-status" id="qkdStatus">
+                                <span class="status-indicator"></span>
+                                <span class="status-text" data-translate="processing_text">Processing...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="error-meter">
+                        <h4>Quantum Error Rate Monitor</h4>
+                        <div class="meter">
+                            <div class="meter-fill" id="errorRate"></div>
+                        </div>
+                        <div class="meter-label">
+                            <span id="errorPercent">0%</span> Error Rate
+                            <span id="errorStatus">Normal</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dynamic BB84 Details Section -->
+            <section class="bb84-details hidden" id="bb84Details">
+                <div class="container">
+                    <h2>The BB84 Protocol: A Live Walkthrough</h2>
+
+                    <h3>1. <span class="dynamic-name" id="alice-dynamic-name">Alice</span> Prepares the Bits</h3>
+                    <p><span class="dynamic-name" id="alice-dynamic-name-2">Alice</span> generates a random string of bits and chooses a random basis for each one. The
+                        vertical/horizontal polarization (`+` basis) and diagonal polarization (`×` basis) are used to
+                        encode the bits into photons.</p>
+                    <div class="code-block" id="aliceBits"></div>
+
+                    <h3>2. <span class="dynamic-name" id="bob-dynamic-name">Bob</span> Measures the Photons</h3>
+                    <p><span class="dynamic-name" id="bob-dynamic-name-2">Bob</span> receives the photons and randomly chooses a basis to measure each one. His measurement result
+                        depends on whether his basis matches <span class="dynamic-name" id="alice-dynamic-name-3">Alice's</span>.</p>
+                    <p><span class="dynamic-name" id="bob-dynamic-name-3">Bob's</span> Bases: <span class="code-line" id="bobBases"></span></p>
+                    <p><span class="dynamic-name" id="bob-dynamic-name-4">Bob's</span> Measured Bits: <span class="code-line" id="bobBits"></span></p>
+
+                    <h3>3. Sifting the Keys</h3>
+                    <p><span class="dynamic-name" id="alice-dynamic-name-4">Alice</span> and <span class="dynamic-name" id="bob-dynamic-name-5">Bob</span> publicly compare their bases. Bits where their bases match are kept, forming the sifted
+                        key. Mismatched bits are discarded.</p>
+                    <p>Matching Bits (Sifted Key): <span class="sifted-keys-line" id="siftedKeys"></span></p>
+
+                    <h3>4. Final Key</h3>
+                    <div class="sifted-key-container hidden" id="finalKeyContainer">
+                        <h4>Final Shared Secret Key</h4>
+                        <div class="final-key-value" id="finalKeyValue"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="results hidden" id="resultsSection">
+                <div class="container">
+                    <div class="results-card card">
+                        <h2>🎯 Transaction Results</h2>
+                        <div class="result-content" id="resultContent">
+                        </div>
+                        <div class="key-message">
+                            <h3>💡 Key Takeaway</h3>
+                            <p id="keyMessage" data-translate="key_benefit">Our QKD prevents online fraud by detecting
+                                hackers instantly using quantum mechanics!</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="runAgain" class="btn btn--primary">Run Another Demo</button>
+                            <button id="learnMore" class="btn btn--outline">
+                                <span data-translate="learn_more">Learn About BB84</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="modal hidden" id="educationalModal">
+                <div class="modal-overlay" id="modalOverlay"></div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>🔬 BB84 Quantum Key Distribution Protocol</h3>
+                        <button class="modal-close" id="closeModal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h4>How BB84 Works:</h4>
+                        <ol>
+                            <li><strong>Quantum Preparation:</strong> Alice prepares photons in random quantum states</li>
+                            <li><strong>Quantum Transmission:</strong> Photons are sent through quantum channel to Bob</li>
+                            <li><strong>Measurement:</strong> Bob measures photons using random basis choices</li>
+                            <li><strong>Sifting:</strong> Alice and Bob compare basis choices over classical channel</li>
+                            <li><strong>Error Detection:</strong> They check for eavesdropping by analyzing error rates</li>
+                            <li><strong>Key Generation:</strong> If secure, they generate identical encryption keys</li>
+                        </ol>
+                        <h4>Banking Security Benefits:</h4>
+                        <ul>
+                            <li>🔒 Unconditional security guaranteed by quantum physics</li>
+                            <li>👁️ Instant detection of any eavesdropping attempts</li>
+                            <li>🛡️ Protection against future quantum computer attacks</li>
+                            <li>🏦 Perfect for high-value banking transactions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // BB84 Banking Security Simulator with Client-Side Simulation
+        class BB84BankingSimulator {
+            constructor() {
+                this.isRunning = false;
+                this.currentAmount = 50000;
+                this.eveAttackEnabled = false;
+                this.currentLanguage = 'english';
+                this.bitLength = 32;
+                this.recipientNames = [];
+
+                this.languages = {
+                    "english": {
+                        "title": "🔒 BB84 Banking Security Simulator",
+                        "subtitle": "Indian Banking Edition - AQVH 2025 Hackathon",
+                        "characters_heading": "Security Participants",
+                        "alice_name": "Alice - Bank Server",
+                        "alice_desc": "Generates quantum keys and encrypts transaction data using BB84 protocol",
+                        "bob_name": "Bob - Customer",
+                        "bob_desc": "Receives quantum keys and securely decrypts banking transactions",
+                        "eve_name": "Eve - Hacker",
+                        "eve_desc": "Attempts to intercept data but gets detected by quantum mechanics",
+                        "demo_heading": "🚀 Interactive Banking Security Demo",
+                        "amount_label": "Transaction Amount",
+                        "scenario_label": "Banking Scenario",
+                        "eve_toggle_label": "Enable Eve Attack (Hacker Simulation)",
+                        "start_button": "Start Secure Transaction",
+                        "traditional_heading": "🔓 Traditional Encryption (RSA-2048)",
+                        "qkd_heading": "🔐 BB84 Quantum Key Distribution",
+                        "secure_message": "QKD established secure channel - Transaction protected!",
+                        "fraud_message": "QKD detected hacker and blocked transaction - Fraud prevented!",
+                        "key_benefit": "Our QKD prevents online fraud by detecting hackers instantly using quantum mechanics!",
+                        "processing_text": "Processing...",
+                        "learn_more": "Learn About BB84"
+                    },
+                    "hindi": {
+                        "title": "🔒 BB84 बैंकिंग सुरक्षा सिमुलेटर",
+                        "subtitle": "भारतीय बैंकिंग संस्करण - AQVH 2025 हैकाथॉन",
+                        "characters_heading": "सुरक्षा प्रतिभागी",
+                        "alice_name": "एलिस - बैंक सर्वर",
+                        "alice_desc": "BB84 प्रोटोकॉल का उपयोग करके क्वांटम की उत्पन्न करता है और लेनदेन डेटा एन्क्रिप्ट करता है",
+                        "bob_name": "बॉब - ग्राहक",
+                        "bob_desc": "क्वांटम की प्राप्त करता है और बैंकिंग लेनदेन को सुरक्षित रूप से डिक्रिप्ट करता है",
+                        "eve_name": "ईव - हैकर",
+                        "eve_desc": "डेटा को इंटरसेप्ट करने का प्रयास करता है लेकिन क्वांटम मैकेनिक्स द्वारा पकड़ा जाता है",
+                        "demo_heading": "🚀 इंटरैक्टिव बैंकिंग सुरक्षा डेमो",
+                        "amount_label": "लेनदेन राशि",
+                        "scenario_label": "बैंकिंग परिदृश्य",
+                        "eve_toggle_label": "ईव अटैक सक्षम करें (हैकर सिमुलेशन)",
+                        "start_button": "सुरक्षित लेनदेन प्रारंभ करें",
+                        "traditional_heading": "🔓 पारंपरिक एन्क्रिप्शन (RSA-2048)",
+                        "qkd_heading": "🔐 BB84 क्वांटम की वितरण",
+                        "secure_message": "QKD ने सुरक्षित चैनल स्थापित किया - लेनदेन सुरक्षित!",
+                        "fraud_message": "QKD ने हैकर का पता लगाया और लेनदेन को ब्लॉक किया - धोखाधड़ी रोकी गई!",
+                        "key_benefit": "हमारा QKD क्वांटम मैकेनिक्स का उपयोग करके हैकर्स को तुरंत पकड़कर ऑनलाइन धोखाधड़ी को रोकता है!",
+                        "processing_text": "प्रसंस्करण...",
+                        "learn_more": "BB84 के बारे में और जानें"
+                    }
+                };
+
+                this.bankingScenarios = [{
+                    "id": "rtgs",
+                    "name_en": "RTGS Transfer",
+                    "name_hi": "RTGS स्थानांतरण",
+                    "description_en": "High-value Real Time Gross Settlement",
+                    "description_hi": "उच्च मूल्य रियल टाइम सकल निपटान",
+                    "amount": 500000
+                }, {
+                    "id": "neft",
+                    "name_en": "NEFT Payment",
+                    "name_hi": "NEFT भुगतान",
+                    "description_en": "National Electronic Funds Transfer",
+                    "description_hi": "राष्ट्रीय इलेक्ट्रॉनिक फंड ट्रांसफर",
+                    "amount": 200000
+                }, {
+                    "id": "property",
+                    "name_en": "Property Purchase",
+                    "name_hi": "संपत्ति खरीद",
+                    "description_en": "Real Estate Transaction",
+                    "description_hi": "रियल एस्टेट लेनदेन",
+                    "amount": 5000000
+                }, {
+                    "id": "remittance",
+                    "name_en": "International Remittance",
+                    "name_hi": "अंतर्राष्ट्रीय प्रेषण",
+                    "description_en": "Foreign Exchange Transfer",
+                    "description_hi": "विदेशी मुद्रा स्थानांतरण",
+                    "amount": 1000000
+                }, {
+                    "id": "business",
+                    "name_en": "Business Payment",
+                    "name_hi": "व्यापारिक भुगतान",
+                    "description_en": "Commercial Transaction",
+                    "description_hi": "वाणिज्यिक लेनदेन",
+                    "amount": 250000
+                }, {
+                    "id": "upi",
+                    "name_en": "Digital UPI",
+                    "name_hi": "डिजिटल UPI",
+                    "description_en": "Unified Payments Interface",
+                    "description_hi": "एकीकृत भुगतान इंटरफ़ेस",
+                    "amount": 25000
+                }];
+
+                // Simulated statistics
+                this.statistics = {
+                    totalSims: 12470,
+                    threatsBlocked: 8920,
+                    fraudSavedCrores: 147,
+                    successRate: 98.5
+                };
+
+                this.elements = {};
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', () => this.init());
+                } else {
+                    this.init();
+                }
+            }
+
+            init() {
+                this.cacheElements();
+                this.setupEventListeners();
+                this.updateAmountDisplay();
+                this.populateBankingScenarios();
+                this.updateLanguage();
+                this.animateStatistics();
+                this.checkLoginStatus();
+                this.generateRecipientNames();
+            }
+
+            cacheElements() {
+                this.elements = {
+                    // Main app container
+                    mainApp: document.getElementById('mainApp'),
+                    // Main app elements
+                    languageToggle: document.getElementById('languageToggle'),
+                    amountSlider: document.getElementById('transactionAmount'),
+                    amountDisplay: document.getElementById('amountDisplay'),
+                    scenarioSelect: document.getElementById('bankingScenario'),
+                    eveToggle: document.getElementById('eveAttack'),
+                    startBtn: document.getElementById('startTransaction'),
+                    runAgainBtn: document.getElementById('runAgain'),
+                    learnMoreBtn: document.getElementById('learnMore'),
+                    closeModalBtn: document.getElementById('closeModal'),
+                    modalOverlay: document.getElementById('modalOverlay'),
+                    educationalModal: document.getElementById('educationalModal'),
+                    comparisonSection: document.getElementById('comparisonSection'),
+                    resultsSection: document.getElementById('resultsSection'),
+                    bb84Details: document.getElementById('bb84Details'),
+                    aliceStatus: document.getElementById('aliceStatus'),
+                    bobStatus: document.getElementById('bobStatus'),
+                    eveStatus: document.getElementById('eveStatus'),
+                    traditionalStatus: document.getElementById('traditionalStatus'),
+                    qkdStatus: document.getElementById('qkdStatus'),
+                    errorRate: document.getElementById('errorRate'),
+                    aliceBits: document.getElementById('aliceBits'),
+                    bobBases: document.getElementById('bobBases'),
+                    bobBits: document.getElementById('bobBits'),
+                    siftedKeys: document.getElementById('siftedKeys'),
+                    finalKeyContainer: document.getElementById('finalKeyContainer'),
+                    finalKeyValue: document.getElementById('finalKeyValue'),
+                    resultContent: document.getElementById('resultContent'),
+                    keyMessage: document.getElementById('keyMessage'),
+                    bobName: document.getElementById('bobName'),
+                    recipientSelect: document.getElementById('recipientSelect'),
+                    selectedRecipientName: document.getElementById('selectedRecipientName'),
+                    dynamicNames: document.querySelectorAll('.dynamic-name')
+                };
+            }
+
+            setupEventListeners() {
+                // Existing event listeners
+                if (this.elements.languageToggle) {
+                    this.elements.languageToggle.addEventListener('click', () => {
+                        this.toggleLanguage();
+                    });
+                }
+                if (this.elements.amountSlider) {
+                    this.elements.amountSlider.addEventListener('input', (e) => {
+                        this.currentAmount = parseInt(e.target.value);
+                        this.updateAmountDisplay();
+                    });
+                }
+                if (this.elements.scenarioSelect) {
+                    this.elements.scenarioSelect.addEventListener('change', (e) => {
+                        const scenario = this.bankingScenarios.find(s => s.id === e.target.value);
+                        if (scenario) {
+                            this.currentAmount = scenario.amount;
+                            if (this.elements.amountSlider) {
+                                this.elements.amountSlider.value = scenario.amount;
+                            }
+                            this.updateAmountDisplay();
+                        }
+                    });
+                }
+                if (this.elements.eveToggle) {
+                    this.elements.eveToggle.addEventListener('change', (e) => {
+                        this.eveAttackEnabled = e.target.checked;
+                        this.updateEveStatus();
+                    });
+                }
+                if (this.elements.startBtn) {
+                    this.elements.startBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        if (!this.isRunning) {
+                            this.startTransactionDemo();
+                        }
+                    });
+                }
+                if (this.elements.runAgainBtn) {
+                    this.elements.runAgainBtn.addEventListener('click', () => this.resetDemo());
+                }
+                if (this.elements.learnMoreBtn) {
+                    this.elements.learnMoreBtn.addEventListener('click', () => this.showModal());
+                }
+                if (this.elements.closeModalBtn) {
+                    this.elements.closeModalBtn.addEventListener('click', () => this.hideModal());
+                }
+                if (this.elements.modalOverlay) {
+                    this.elements.modalOverlay.addEventListener('click', () => this.hideModal());
+                }
+                 // New event listener for the recipient select dropdown
+                if (this.elements.recipientSelect) {
+                    this.elements.recipientSelect.addEventListener('change', () => {
+                        this.updateSelectedRecipientName();
+                        this.updateDynamicNames();
+                    });
+                }
+            }
+            
+            // New method to populate the recipient dropdown with names
+            populateRecipientDropdown() {
+                const selectElement = this.elements.recipientSelect;
+                if (selectElement) {
+                    selectElement.innerHTML = '';
+                    this.recipientNames.forEach(name => {
+                        const option = document.createElement('option');
+                        option.value = name;
+                        option.textContent = name;
+                        selectElement.appendChild(option);
+                    });
+                    this.updateSelectedRecipientName();
+                }
+            }
+            
+            // Updates the dynamic name placeholders in the walkthrough section
+            updateDynamicNames() {
+                const selectedRecipient = this.elements.recipientSelect.value;
+                const customerName = localStorage.getItem('username');
+
+                this.elements.dynamicNames.forEach(element => {
+                    const id = element.id;
+                    if (id.includes('alice')) {
+                        element.textContent = selectedRecipient;
+                    } else if (id.includes('bob')) {
+                        element.textContent = customerName;
+                    }
+                });
+            }
+
+            // New method to update the displayed recipient name
+            updateSelectedRecipientName() {
+                const selectedName = this.elements.recipientSelect.value;
+                if (this.elements.selectedRecipientName) {
+                    this.elements.selectedRecipientName.textContent = selectedName;
+                }
+            }
+
+            // Method to generate a list of 100 random names
+            generateRecipientNames() {
+                const firstNames = ['Aarav', 'Advik', 'Ananya', 'Aryan', 'Diya', 'Ishaan', 'Jiya', 'Kavya', 'Krish', 'Myra', 'Prisha', 'Riya', 'Shaurya', 'Siya', 'Vivaan', 'Zoya', 'Aditi', 'Akash', 'Bhavya', 'Chirag', 'Devika', 'Gaurav', 'Hitesh', 'Ira', 'Jayesh', 'Komal', 'Lakshya', 'Meera', 'Nikhil', 'Pooja', 'Rahul', 'Sneha', 'Tanisha', 'Varun', 'Yash', 'Zainab', 'Anand', 'Disha', 'Esha', 'Farhan', 'Gauri', 'Harsh', 'Karan', 'Lata', 'Manoj', 'Nidhi', 'Om', 'Priya', 'Rohan', 'Shweta', 'Abhinav', 'Ankit', 'Chetan', 'Deepak', 'Eshita', 'Gaurangi', 'Harshit', 'Jatin', 'Kirti', 'Mehul', 'Neha', 'Pankaj', 'Rajat', 'Sana', 'Tanvi', 'Uday', 'Ved', 'Yuvraj', 'Zain', 'Aman', 'Bhavin', 'Dhruv', 'Falguni', 'Gitanjali', 'Himanshu', 'Jaspreet', 'Karishma', 'Mahesh', 'Nirav', 'Parth', 'Rishabh', 'Saurabh', 'Tina', 'Vinay', 'Yashika', 'Zoya'];
+                const lastNames = ['Sharma', 'Verma', 'Singh', 'Patel', 'Jain', 'Gupta', 'Kumar', 'Shah', 'Mehta', 'Das', 'Bhatt', 'Trivedi', 'Gandhi', 'Chopra', 'Malhotra', 'Agarwal', 'Srivastava', 'Yadav', 'Reddy', 'Pillai', 'Rao', 'Shinde', 'Dubey', 'Choudhury', 'Ghosh', 'Mishra', 'Tiwari', 'Khan', 'Sheikh', 'Naidu', 'Soni', 'Thakur', 'Goyal', 'Mehra', 'Kohli', 'Kapoor', 'Bajaj', 'Bansal', 'Saxena', 'Dutta', 'Sarkar', 'Banerjee', 'Chatterjee', 'Mukherjee', 'Roy', 'Sen', 'Dutta', 'Singh', 'Patil', 'Jadhav', 'Kulkarni', 'Desai', 'Joshi', 'Pawar', 'Vora', 'Chaudhari', 'Patwardhan', 'Gokhale', 'Lele', 'Phadke', 'Ranade', 'Pawar', 'Bhosale'];
+
+                const names = new Set();
+                while(names.size < 100) {
+                    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+                    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+                    names.add(`${firstName} ${lastName}`);
+                }
+                this.recipientNames = Array.from(names);
+                this.populateRecipientDropdown();
+            }
+
+            // Method to show the main app
+            showMainApp() {
+                this.elements.mainApp.classList.remove('hidden');
+                this.elements.comparisonSection.classList.remove('hidden');
+                this.elements.resultsSection.classList.add('hidden');
+                this.elements.bb84Details.classList.add('hidden');
+                this.updateBobName();
+                this.updateDynamicNames();
+            }
+
+            // Method to check for login status on page load
+            checkLoginStatus() {
+                const username = localStorage.getItem('username');
+                if (username) {
+                    this.showMainApp();
+                } else {
+                    // Display a friendly message if the user isn't logged in.
+                    const appContainer = document.querySelector('.app');
+                    appContainer.innerHTML = `
+                        <div style="text-align: center; padding: 50px;">
+                            <h2>Please log in to use the simulator.</h2>
+                            <p>You can go back to the login page by clicking the button below.</p>
+                            <a href="../index.html" class="btn btn--primary" style="margin-top: 20px;">Go to Login Page</a>
+                        </div>
+                    `;
+                }
+            }
+
+            toggleLanguage() {
+                document.body.classList.add('language-transition', 'fade-out');
+                setTimeout(() => {
+                    this.currentLanguage = this.currentLanguage === 'english' ? 'hindi' : 'english';
+                    this.updateLanguage();
+                    this.populateBankingScenarios();
+                    document.body.classList.remove('fade-out');
+                    setTimeout(() => {
+                        document.body.classList.remove('language-transition');
+                    }, 150);
+                }, 150);
+            }
+
+            updateLanguage() {
+                const currentLang = this.languages[this.currentLanguage];
+                const translatableElements = document.querySelectorAll('[data-translate]');
+                translatableElements.forEach(element => {
+                    const key = element.getAttribute('data-translate');
+                    if (currentLang[key]) {
+                        element.textContent = currentLang[key];
+                    }
+                });
+                const languageToggle = document.getElementById('languageToggle');
+                if (languageToggle) {
+                    const langText = languageToggle.querySelector('.lang-text');
+                    const langTextAlt = languageToggle.querySelector('.lang-text-alt');
+                    const flags = languageToggle.querySelectorAll('.flag');
+                    if (this.currentLanguage === 'english') {
+                        langText.textContent = 'English';
+                        langTextAlt.textContent = 'हिं';
+                        flags[0].textContent = '🇬🇧';
+                        flags[1].textContent = '🇮🇳';
+                    } else {
+                        langText.textContent = 'हिंदी';
+                        langTextAlt.textContent = 'EN';
+                        flags[0].textContent = '🇮🇳';
+                        flags[1].textContent = '🇬🇧';
+                    }
+                }
+                document.documentElement.lang = this.currentLanguage === 'english' ? 'en' : 'hi';
+            }
+
+            populateBankingScenarios() {
+                const scenarioSelect = this.elements.scenarioSelect;
+                if (scenarioSelect) {
+                    const currentValue = scenarioSelect.value;
+                    scenarioSelect.innerHTML = '';
+                    this.bankingScenarios.forEach((scenario, index) => {
+                        const option = document.createElement('option');
+                        option.value = scenario.id;
+                        const name = this.currentLanguage === 'english' ? scenario.name_en : scenario.name_hi;
+                        const formattedAmount = this.formatIndianCurrency(scenario.amount);
+                        option.textContent = `${name} - ${formattedAmount}`;
+                        if (index === 0 && !currentValue) {
+                            option.selected = true;
+                            this.currentAmount = scenario.amount;
+                            if (this.elements.amountSlider) {
+                                this.elements.amountSlider.value = scenario.amount;
+                            }
+                            this.updateAmountDisplay();
+                        } else if (option.value === currentValue) {
+                            option.selected = true;
+                        }
+                        scenarioSelect.appendChild(option);
+                    });
+                }
+            }
+
+            formatIndianCurrency(amount) {
+                if (amount >= 10000000) {
+                    return `₹${(amount / 10000000).toFixed(1)} Cr`;
+                } else if (amount >= 100000) {
+                    return `₹${(amount / 100000).toFixed(1)} L`;
+                } else if (amount >= 1000) {
+                    return `₹${(amount / 1000).toFixed(0)}K`;
+                } else {
+                    return `₹${amount.toLocaleString('en-IN')}`;
+                }
+            }
+
+            updateAmountDisplay() {
+                const amountDisplay = this.elements.amountDisplay;
+                if (amountDisplay) {
+                    const formattedAmount = this.currentAmount.toLocaleString('en-IN');
+                    amountDisplay.textContent = formattedAmount;
+                }
+            }
+
+            updateEveStatus() {
+                const eveStatus = this.elements.eveStatus;
+                const eveCard = document.querySelector('[data-character="eve"]');
+                if (eveStatus && eveCard) {
+                    if (this.eveAttackEnabled) {
+                        eveStatus.textContent = this.currentLanguage === 'english' ? 'Attack Mode' : 'आक्रमण मोड';
+                        eveStatus.className = 'character-card__status status--error';
+                        // Using a hardcoded color value from CSS variables, as style.borderColor doesn't support var() directly
+                        eveCard.style.borderColor = 'rgba(255, 84, 89, 1)';
+                    } else {
+                        eveStatus.textContent = this.currentLanguage === 'english' ? 'Inactive' : 'निष्क्रिय';
+                        eveStatus.className = 'character-card__status status--success';
+                        // Using a hardcoded color value from CSS variables
+                        eveCard.style.borderColor = 'rgba(94, 82, 64, 0.12)';
+                    }
+                }
+            }
+
+            // New method to update Bob's name
+            updateBobName() {
+                const username = localStorage.getItem('username');
+                if (username && this.elements.bobName) {
+                    this.elements.bobName.textContent = `${username} - Customer`;
+                }
+            }
+
+            animateStatistics() {
+                const totalSims = document.getElementById('totalSims');
+                const threatsBlocked = document.getElementById('threatsBlocked');
+                const fraudSaved = document.getElementById('fraudSaved');
+                const successRate = document.getElementById('successRate');
+                if (totalSims && threatsBlocked && successRate && fraudSaved) {
+                    this.animateNumber(totalSims, 0, this.statistics.totalSims, 2000, false, true);
+                    this.animateNumber(threatsBlocked, 0, this.statistics.threatsBlocked, 2500, false, true);
+                    this.animateNumber(successRate, 0, this.statistics.successRate, 3000, true);
+                    let currentValue = 0;
+                    const targetValue = this.statistics.fraudSavedCrores;
+                    const duration = 3500;
+                    const startTime = performance.now();
+                    const updateFraud = (currentTime) => {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                        currentValue = targetValue * easeOutQuart;
+                        fraudSaved.textContent = `₹${Math.floor(currentValue)} Cr`;
+                        if (progress < 1) {
+                            requestAnimationFrame(updateFraud);
+                        }
+                    };
+                    requestAnimationFrame(updateFraud);
+                }
+            }
+
+            animateNumber(element, start, end, duration, isPercent = false, isIndian = false) {
+                const startTime = performance.now();
+                const range = end - start;
+                const updateNumber = (currentTime) => {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                    const current = start + (range * easeOutQuart);
+                    if (isPercent) {
+                        element.textContent = current.toFixed(1) + '%';
+                    } else if (isIndian) {
+                        element.textContent = Math.floor(current).toLocaleString('en-IN');
+                    } else {
+                        element.textContent = Math.floor(current).toString();
+                    }
+                    if (progress < 1) {
+                        requestAnimationFrame(updateNumber);
+                    }
+                };
+                requestAnimationFrame(updateNumber);
+            }
+
+            async startTransactionDemo() {
+                this.isRunning = true;
+                this.elements.comparisonSection.classList.remove('hidden');
+                this.elements.resultsSection.classList.add('hidden');
+                this.elements.bb84Details.classList.remove('hidden');
+                this.elements.finalKeyContainer.classList.add('hidden');
+
+                // Clear dynamic content
+                this.elements.aliceBits.innerHTML = '';
+                this.elements.bobBases.innerHTML = '';
+                this.elements.bobBits.innerHTML = '';
+                this.elements.siftedKeys.innerHTML = '';
+
+                const processingText = this.languages[this.currentLanguage].processing_text;
+                this.elements.startBtn.innerHTML = `${processingText}... �`;
+                this.elements.startBtn.disabled = true;
+                this.elements.startBtn.style.opacity = '0.7';
+
+                this.updateComparisonStatus('processing');
+
+                const {
+                    key,
+                    errorRate
+                } = await this.runBB84ProtocolSimulation();
+
+                const isSecure = errorRate < 5;
+                const result = isSecure ? {
+                    success: true,
+                    error_rate: errorRate
+                } : {
+                    success: false,
+                    error_rate: errorRate
+                };
+
+                // Determine the transaction result status string
+                const resultStatus = isSecure ? 'Secure' : 'Fraud Detected';
+
+                // Get the final key value from the simulation result
+                const finalKeyValue = key;
+
+                // Call the new method to save the transaction to the database
+                this.saveTransaction(
+                    this.currentAmount,
+                    this.elements.scenarioSelect.value,
+                    this.eveAttackEnabled,
+                    resultStatus,
+                    finalKeyValue,
+                    localStorage.getItem("username")
+                );
+
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                const transactionResult = this.createTransactionResult(result.success, result.error_rate);
+                this.showResults(transactionResult);
+                this.updateComparisonStatus(result.success ? 'secure' : 'detected');
+
+                this.isRunning = false;
+                this.elements.startBtn.disabled = false;
+                this.elements.startBtn.style.opacity = '1';
+                this.elements.startBtn.innerHTML = this.languages[this.currentLanguage].start_button + ' 🔐';
+            }
+
+            // Fix: Replaced the failing `fetch` call with a console log to simulate saving the transaction.
+            // In this environment, there is no backend to save data to.
+            saveTransaction(amount, scenario, eveAttack, status, finalKey, username) {
+                console.log('Simulating transaction save...');
+                console.log('Transaction Details:', {
+                    amount,
+                    scenario,
+                    eveAttack,
+                    status,
+                    finalKey,
+                    username
+                });
+                console.log('Transaction simulated successfully.');
+
+                // Now, let's make the actual fetch call to your provided backend.
+                fetch('/api/transactions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount,
+                        scenario,
+                        eveAttack,
+                        status,
+                        finalKey,
+                        username,
+                        recipient: this.elements.recipientSelect.value
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => console.log('Transaction saved to server:', data))
+                .catch((error) => console.error('Error saving transaction to server:', error));
+            }
+
+
+            async runBB84ProtocolSimulation() {
+                const bits = [];
+                const aliceBases = [];
+                const bobBases = [];
+                const bobBits = [];
+
+                // Step 1: Alice prepares bits and bases
+                let aliceBitsHtml = '';
+                for (let i = 0; i < this.bitLength; i++) {
+                    const bit = Math.round(Math.random());
+                    const basis = Math.random() < 0.5 ? '+' : '×';
+                    bits.push(bit);
+                    aliceBases.push(basis);
+                    aliceBitsHtml += `<strong>${bit}</strong>(${basis}) `;
+                }
+                this.elements.aliceBits.innerHTML = aliceBitsHtml.trim();
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Step 2: Bob measures with random bases
+                let bobBasesHtml = '';
+                let bobBitsHtml = '';
+                let errors = 0;
+                let siftedKeys = [];
+                let aliceSiftedBits = [];
+
+                for (let i = 0; i < this.bitLength; i++) {
+                    const bobBasis = Math.random() < 0.5 ? '+' : '×';
+                    bobBases.push(bobBasis);
+
+                    let measuredBit;
+                    if (bobBasis === aliceBases[i]) {
+                        measuredBit = bits[i];
+                    } else {
+                        measuredBit = Math.round(Math.random());
+                    }
+
+                    // Simulated Eve attack
+                    if (this.eveAttackEnabled) {
+                        const eveInterceptionProb = 0.5;
+                        if (Math.random() < eveInterceptionProb) {
+                            const eveBasis = Math.random() < 0.5 ? '+' : '×';
+                            if (eveBasis !== aliceBases[i]) {
+                                // An eavesdropper introduces errors by measuring with the wrong basis
+                                measuredBit = 1 - measuredBit;
+                            }
+                        }
+                    }
+
+                    bobBits.push(measuredBit);
+                    bobBasesHtml += `${bobBasis} `;
+                    bobBitsHtml += `${measuredBit} `;
+
+                    // Sifting
+                    if (bobBasis === aliceBases[i]) {
+                        siftedKeys.push(measuredBit);
+                        aliceSiftedBits.push(bits[i]);
+                    }
+                }
+
+                this.elements.bobBases.textContent = bobBasesHtml.trim();
+                this.elements.bobBits.textContent = bobBitsHtml.trim();
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Step 3: Sifting and error checking
+                let siftedKeysString = siftedKeys.map(bit => bit.toString()).join('');
+                let errorsInKey = 0;
+                for (let i = 0; i < siftedKeys.length; i++) {
+                    if (siftedKeys[i] !== aliceSiftedBits[i]) {
+                        errorsInKey++;
+                    }
+                }
+
+                const errorRate = siftedKeys.length > 0 ? (errorsInKey / siftedKeys.length) * 100 : 0;
+                this.updateErrorRate(errorRate);
+                this.elements.siftedKeys.textContent = siftedKeysString;
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                this.elements.finalKeyContainer.classList.remove('hidden');
+                this.elements.finalKeyValue.textContent = siftedKeysString;
+                
+                this.elements.bb84Details.scrollIntoView({
+                    behavior: 'smooth'
+                });
+
+                return {
+                    key: siftedKeysString,
+                    errorRate: errorRate
+                };
+            }
+
+            createTransactionResult(isSecure, errorRate) {
+                const username = localStorage.getItem('username') || 'Bob';
+                const recipientName = this.elements.recipientSelect.value || 'Alice';
+
+                if (isSecure) {
+                    return {
+                        success: true,
+                        message: this.languages[this.currentLanguage].secure_message,
+                        details: `A secure quantum channel was established with an error rate of ${errorRate.toFixed(2)}%. The transaction of ₹${this.currentAmount.toLocaleString('en-IN')} was completed successfully by ${username} to ${recipientName}.`
+                    };
+                } else {
+                    return {
+                        success: false,
+                        message: this.languages[this.currentLanguage].fraud_message,
+                        details: `A high quantum error rate of ${errorRate.toFixed(2)}% was detected. This signifies an eavesdropping attempt. The transaction from ${username} to ${recipientName} was automatically blocked, preventing a fraudulent loss of ₹${this.currentAmount.toLocaleString('en-IN')}.`
+                    };
+                }
+            }
+
+            showResults(result) {
+                const resultsSection = this.elements.resultsSection;
+                const resultContent = this.elements.resultContent;
+                const keyMessage = this.elements.keyMessage;
+
+                const icon = result.success ? '✅' : '❌';
+                const message = `<span class="result-icon">${icon}</span><p class="result-message">${result.message}</p><p class="result-details">${result.details}</p>`;
+
+                resultContent.innerHTML = message;
+                keyMessage.textContent = this.languages[this.currentLanguage].key_benefit;
+
+                resultsSection.classList.remove('hidden');
+                resultsSection.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+
+            resetDemo() {
+                this.elements.comparisonSection.classList.add('hidden');
+                this.elements.resultsSection.classList.add('hidden');
+                this.elements.bb84Details.classList.add('hidden');
+                document.getElementById('eveAttack').checked = false;
+                this.eveAttackEnabled = false;
+                this.updateEveStatus();
+                this.updateComparisonStatus('initial');
+                this.updateErrorRate(0);
+            }
+
+            updateComparisonStatus(status) {
+                const traditionalStatus = this.elements.traditionalStatus;
+                const qkdStatus = this.elements.qkdStatus;
+                const processingText = this.languages[this.currentLanguage].processing_text;
+
+                if (status === 'processing') {
+                    traditionalStatus.className = 'security-status';
+                    qkdStatus.className = 'security-status';
+                    traditionalStatus.querySelector('.status-text').textContent = processingText;
+                    qkdStatus.querySelector('.status-text').textContent = processingText;
+                } else if (status === 'secure') {
+                    traditionalStatus.className = 'security-status compromised';
+                    traditionalStatus.querySelector('.status-text').textContent = 'Key Exposed';
+                    qkdStatus.className = 'security-status secure';
+                    qkdStatus.querySelector('.status-text').textContent = 'Key Secure';
+                } else if (status === 'detected') {
+                    traditionalStatus.className = 'security-status compromised';
+                    traditionalStatus.querySelector('.status-text').textContent = 'Key Exposed';
+                    qkdStatus.className = 'security-status detected';
+                    qkdStatus.querySelector('.status-text').textContent = 'Attack Detected';
+                } else {
+                    traditionalStatus.className = 'security-status';
+                    qkdStatus.className = 'security-status';
+                    traditionalStatus.querySelector('.status-text').textContent = processingText;
+                    qkdStatus.querySelector('.status-text').textContent = processingText;
+                }
+            }
+
+            updateErrorRate(rate) {
+                const errorRateFill = this.elements.errorRate;
+                const errorPercent = document.getElementById('errorPercent');
+                const errorStatus = document.getElementById('errorStatus');
+
+                if (errorRateFill && errorPercent && errorStatus) {
+                    let statusText = 'Normal';
+                    if (rate > 10) {
+                        statusText = 'Danger';
+                        errorStatus.className = 'danger';
+                    } else if (rate > 5) {
+                        statusText = 'Warning';
+                        errorStatus.className = 'warning';
+                    } else {
+                        statusText = 'Normal';
+                        errorStatus.className = 'normal';
+                    }
+
+                    errorRateFill.style.width = `${Math.min(rate, 100)}%`;
+                    errorPercent.textContent = `${rate.toFixed(1)}%`;
+                    errorStatus.textContent = statusText;
+                }
+            }
+
+            showModal() {
+                const modal = document.getElementById('educationalModal');
+                if (modal) {
+                    modal.classList.remove('hidden');
+                }
+            }
+
+            hideModal() {
+                const modal = document.getElementById('educationalModal');
+                if (modal) {
+                    modal.classList.add('hidden');
+                }
+            }
+        }
+
+        new BB84BankingSimulator();
+    </script>
+</body>
+
+</html>
+�

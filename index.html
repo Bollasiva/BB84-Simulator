@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshUser - Admin Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="app" class="auth-container">
+        
+        <!-- Sign Up Page -->
+        <div id="signupPage" class="auth-card">
+            <h1 class="logo">Admin Page</h1>
+            <p class="message-box" style="margin-bottom: 1.5rem;">Sign up to create an account.</p>
+            <form id="signupForm">
+                <div class="form-group">
+                    <input type="email" id="signupEmail" class="form-control" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="signupFullName" class="form-control" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="signupUsername" class="form-control" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="signupPassword" class="form-control" placeholder="Password" required>
+                </div>
+                <button type="submit" id="signupBtn" class="auth-btn">Sign up</button>
+            </form>
+            <div id="signupError" class="error-message hidden"></div>
+            <div class="message-box">
+                <p>Have an account? <a href="#" id="showSigninLink">Log in</a></p>
+            </div>
+        </div>
+
+        <!-- Sign In Page -->
+        <div id="signinPage" class="auth-card hidden">
+            <h1 class="logo">Admin Page</h1>
+            <form id="signinForm">
+                <div class="form-group">
+                    <input type="text" id="signinUsername" class="form-control" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="signinPassword" class="form-control" placeholder="Password" required>
+                </div>
+                <button type="submit" id="signinBtn" class="auth-btn">Sign In</button>
+            </form>
+            <div id="signinError" class="error-message hidden"></div>
+            <div class="message-box">
+                <p>Forgot your password? <a href="#" id="showForgotPasswordLink">Get help logging in.</a></p>
+                <p>Don't have an account? <a href="#" id="showSignupLink2">Sign up</a></p>
+            </div>
+        </div>
+
+        <!-- Forgot Password Page -->
+        <div id="forgotPasswordPage" class="auth-card hidden">
+            <h1 class="logo">Admin Page</h1>
+            <p class="message-box">Enter your email and we'll simulate sending a password reset link.</p>
+            <form id="forgotPasswordForm">
+                <div class="form-group">
+                    <input type="email" id="forgotPasswordEmail" class="form-control" placeholder="Email" required>
+                </div>
+                <button type="submit" id="forgotPasswordBtn" class="auth-btn">Send Reset Link</button>
+            </form>
+            <div id="forgotPasswordMessage" class="message-box success-message hidden"></div>
+            <div id="forgotPasswordError" class="message-box error-message hidden"></div>
+            <div class="message-box">
+                <p><a href="#" id="backToSigninLink">Back to Log In</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ✅ Keep JavaScript in app.js -->
+    <script src="app.js"></script>
+</body>
+</html>
